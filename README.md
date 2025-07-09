@@ -2,7 +2,7 @@
 
 This project implements a data pipeline to build a daily ageing snapshot fact table for outstanding invoices and credit notes. The system processes invoices, credit notes, and payments to create an ageing analysis grouped by how long each document has been unpaid.
 
-The database is Postgresql, Python Libs used on are: psycopg2 and python-dotenv
+The database is Postgresql, Python Libs used on this project are: psycopg2 and python-dotenv
 
 ## Table of Contents
 
