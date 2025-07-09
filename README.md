@@ -2,11 +2,16 @@
 
 This project implements a data pipeline to build a daily ageing snapshot fact table for outstanding invoices and credit notes. The system processes invoices, credit notes, and payments to create an ageing analysis grouped by how long each document has been unpaid.
 
+The database is Postgresql, libs I use in this is: psycopg2 and python-dotenv
+
 ## Table of Contents
 
 - [Database Schema](#database-schema)
 - [Ageing SQL Logic](#ageing-sql-logic)
 - [How To Run Data Pipeline](#how-to-run-data-pipeline)
+  - [Setup Python Environment](#0-setup-python-environment)
+  - [Setup Database](#1-setup-database-run_migrationssh)
+  - [Process Ageing Pipeline](#2-process-ageing-pipeline-ageing_processorpy)
 
 ## Database Schema
 
@@ -217,6 +222,39 @@ The SQL uses 6 parameters (all the same as_at_date):
 
 ## How To Run Data Pipeline
 
+### 0. Setup Python Environment
+
+Before running the data pipeline, you need to set up the Python environment:
+
+#### **Create Virtual Environment**
+```bash
+# Create a virtual environment
+python -m venv venv
+
+# Activate the virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+# venv\Scripts\activate
+```
+
+#### **Install Dependencies**
+```bash
+# Install required packages
+pip install -r requirements.txt
+```
+
+#### **Environment Variables**
+Create a `.env` file in the project root with your database credentials:
+```bash
+# .env file
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=postgres
+DB_USER=postgres
+DB_PASSWORD=your_password
+```
+
 ### 1. Setup Database (`run_migrations.sh`)
 
 The `run_migrations.sh` script sets up the database tables and sample data. It executes the migration files in the correct order to create the required schema.
@@ -301,7 +339,7 @@ python ageing_processor.py
 
 **Important: Changing the Processing Date**
 
-The `as_at_date` parameter is crucial for ageing calculations. To change the processing date, modify line 149 in `ageing_processor.py`:
+The `as_at_date` parameter is crucial for ageing calculations. Currently my code is hardcoding date(2025, 7, 7) on the code is just for testing with the same sample on the Assignment. To change the processing date, modify line `as_at_date` in `ageing_processor.py`:
 
 ```python
 # Current setting
@@ -317,7 +355,7 @@ as_at_date = date(2024, 12, 31)             # Process as of December 31, 2024
 - **Document Inclusion**: Only documents created on or before this date are processed
 - **Payment Cutoff**: Only payments made on or before this date are considered
 - **Ageing Calculation**: Days old is calculated as `as_at_date - document_date`
-- **Output File**: CSV filename includes this date (e.g., `ageing_fact_table_2025-07-07.csv`)
+- **Output File**: CSV filename includes this date (e.g., `ageing_fact_table_2025-07-07.csv`, `ageing_fact_table_2025-07-08.csv`)
 
 **Business Impact**:
 - **Earlier dates**: Fewer documents, potentially more outstanding amounts
