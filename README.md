@@ -24,10 +24,7 @@ CREATE TABLE invoices (
 );
 ```
 
-**Sample Data**:
-- 8 invoice records with amounts ranging from $100 to $500
-- Dates from 2024-12-15 to 2025-06-20
-- Multiple centres (c_01, c_02, c_03) and classes
+**Sample Data**: sample_data/invoices.csv
 
 ### 2. Credit Notes Table (`02_credit_notes.sql`)
 
@@ -45,9 +42,7 @@ CREATE TABLE credit_notes (
 );
 ```
 
-**Sample Data**:
-- Sample data on path sample_data/*.csv
-- Sample output for data in sample_data/ageging_output_2025-07-07.csv
+**Sample Data**: Sample data on path sample_data/credit_notes.csv
 
 ### 3. Payments Table (`03_payments.sql`)
 
@@ -64,10 +59,7 @@ CREATE TABLE payments (
 );
 ```
 
-**Sample Data**:
-- 8 payment records with amounts ranging from $40 to $250
-- Links to both invoices and credit notes
-- Payment dates from 2025-01-10 to 2025-06-10
+**Sample Data**:Sample data on path sample_data/payments.csv
 
 ### 4. Ageing Fact Table (`04_ageing_fact_table.sql`)
 
@@ -92,6 +84,9 @@ CREATE TABLE ageing_fact_table (
     as_at_date DATE NOT NULL,             -- Snapshot date for ageing
 );
 ```
+**Sample Data**:
+- Sample data on path sample_data/ageging_output_2025-07-07.csv
+- If we run the code with `run_migrations.sql` and `ageing_processor.py` The csv file named is `ageging_output_2025-07-07.csv` and in the same path
 
 
 ## Ageing SQL Logic (`sql/generate_ageing_fact.sql`)
