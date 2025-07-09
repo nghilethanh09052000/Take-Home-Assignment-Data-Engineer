@@ -60,8 +60,6 @@ class AgeingProcessor:
             self.conn.close()
             logger.info("Database connection closed")
     
-
-     
     def clear_existing_ageing_data(self, as_at_date: date):
         """Clear existing ageing data for the specified date"""
         try:
