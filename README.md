@@ -38,7 +38,7 @@ CREATE TABLE invoices (
 );
 ```
 
-**Sample Data**: sample_data/invoices.csv
+**Sample Data**: Sample data on path sample_data/invoices.csv
 
 ### 2. Credit Notes Table (`02_credit_notes.sql`)
 
@@ -73,7 +73,7 @@ CREATE TABLE payments (
 );
 ```
 
-**Sample Data**:Sample data on path sample_data/payments.csv
+**Sample Data**: Sample data on path sample_data/payments.csv
 
 ### 4. Ageing Fact Table (`04_ageing_fact_table.sql`)
 
