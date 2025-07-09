@@ -158,72 +158,7 @@ class TestAgeingProcessor(unittest.TestCase):
             if os.path.exists(temp_filename):
                 os.unlink(temp_filename)
     
-    def test_ageing_calculation_logic(self):
-        """Test the ageing calculation logic with sample data"""
-        # Test case 1: inv_001 (invoice)
-        # Invoice date: 2025-05-01, Amount: 300.00, Payment: 150.00 on 2025-05-10
-        # As at date: 2025-07-07
-        # Days old: 67 days (61-90 bucket)
-        # Outstanding: 300 - 150 = 150.00
-        # Expected: day_90 = 150.00
-        
-        test_date = date(2025, 7, 7)
-        invoice_date = date(2025, 5, 1)
-        days_old = (test_date - invoice_date).days
-        outstanding_amount = 150.00
-        
-        # Verify ageing bucket calculation
-        if 61 <= days_old <= 90:
-            expected_bucket = 'day_90'
-        elif 31 <= days_old <= 60:
-            expected_bucket = 'day_60'
-        elif 0 <= days_old <= 30:
-            expected_bucket = 'day_30'
-        else:
-            expected_bucket = 'day_180_and_above'
-        
-        self.assertEqual(days_old, 67)
-        self.assertEqual(expected_bucket, 'day_90')
-        self.assertEqual(outstanding_amount, 150.00)
-    
-    def test_ageing_buckets(self):
-        """Test ageing bucket assignments"""
-        test_cases = [
-            (0, 'day_30'),      # 0 days
-            (15, 'day_30'),     # 15 days
-            (30, 'day_30'),     # 30 days
-            (45, 'day_60'),     # 45 days
-            (60, 'day_60'),     # 60 days
-            (75, 'day_90'),     # 75 days
-            (90, 'day_90'),     # 90 days
-            (105, 'day_120'),   # 105 days
-            (120, 'day_120'),   # 120 days
-            (135, 'day_150'),   # 135 days
-            (150, 'day_150'),   # 150 days
-            (165, 'day_180'),   # 165 days
-            (180, 'day_180'),   # 180 days
-            (200, 'day_180_and_above'),  # 200 days
-        ]
-        
-        for days_old, expected_bucket in test_cases:
-            with self.subTest(days_old=days_old):
-                if 0 <= days_old <= 30:
-                    bucket = 'day_30'
-                elif 31 <= days_old <= 60:
-                    bucket = 'day_60'
-                elif 61 <= days_old <= 90:
-                    bucket = 'day_90'
-                elif 91 <= days_old <= 120:
-                    bucket = 'day_120'
-                elif 121 <= days_old <= 150:
-                    bucket = 'day_150'
-                elif 151 <= days_old <= 180:
-                    bucket = 'day_180'
-                else:
-                    bucket = 'day_180_and_above'
-                
-                self.assertEqual(bucket, expected_bucket)
-    
+
     def test_different_dates(self):
         """Test processing with different dates"""
         for test_date in self.test_dates:

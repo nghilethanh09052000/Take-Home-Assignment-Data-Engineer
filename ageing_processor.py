@@ -141,8 +141,16 @@ def main():
         processor.connect()
         
 
+        # We should set the as_at_date to a specific date for processing
+        # For example, let's use 2025-07-07 as the date for processing
+        # This date should be adjusted based on your requirements
+        # Here we are using a hardcoded date for demonstration purposes
+        # In a real-world scenario, this could be passed as an argument or read from a
         as_at_date = date(2025, 7, 7)
         logger.info(f"Processing ageing data for date: {as_at_date}")
+        
+        # Clear existing ageing data for this date
+        processor.clear_existing_ageing_data(as_at_date)
                 
         # Generate ageing fact table
         processor.generate_ageing_fact(as_at_date)

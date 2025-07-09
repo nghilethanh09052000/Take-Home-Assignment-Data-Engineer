@@ -267,15 +267,60 @@ export DB_USER=your_user
 - **Database**: Target database must exist
 - **Permissions**: User must have CREATE TABLE and INSERT permissions
 
-### 2. Process Ageing Pipeline
+### 2. Process Ageing Pipeline (`ageing_processor.py`)
 
-After successful database setup, run the ageing processor:
+The `ageing_processor.py` script is the main data processing pipeline that generates the ageing fact table. It connects to the database, processes the ageing calculations, and exports results to CSV.
+
+#### **What the Script Does**
+
+1. **Database Connection**: Connects to PostgreSQL using environment variables
+2. **Data Clearing**: Removes existing ageing data for the current date (As this is snapshot date, the hardcoding date(2025, 7, 7) on the code is just for testing with the same sample on the Assignment)
+3. **Ageing Generation**: Runs the ageing SQL logic to calculate outstanding amounts
+4. **CSV Export**: Exports results to a CSV file
+
+#### **How to Run**
 
 ```bash
 python ageing_processor.py
 ```
 
-This will:
-- Connect to the database
-- Generate ageing fact table data
-- Export results to CSV file
+#### **Configuration**
+
+**Database Connection**: The script uses environment variables for database connection:
+- `DB_HOST`: PostgreSQL host (default: localhost)
+- `DB_PORT`: PostgreSQL port (default: 5432) 
+- `DB_NAME`: Database name (default: postgres)
+- `DB_USER`: Database username (default: postgres)
+- `DB_PASSWORD`: Database password
+
+**Important: Changing the Processing Date**
+
+The `as_at_date` parameter is crucial for ageing calculations. To change the processing date, modify line 149 in `ageing_processor.py`:
+
+```python
+# Current setting
+as_at_date = date(2025, 7, 7)
+
+# Examples of other dates you can use:
+as_at_date = date.today()                    # Process as of today
+as_at_date = date(2025, 6, 30)              # Process as of June 30, 2025
+as_at_date = date(2024, 12, 31)             # Process as of December 31, 2024
+```
+
+**What `as_at_date` Affects**:
+- **Document Inclusion**: Only documents created on or before this date are processed
+- **Payment Cutoff**: Only payments made on or before this date are considered
+- **Ageing Calculation**: Days old is calculated as `as_at_date - document_date`
+- **Output File**: CSV filename includes this date (e.g., `ageing_fact_table_2025-07-07.csv`)
+
+**Business Impact**:
+- **Earlier dates**: Fewer documents, potentially more outstanding amounts
+- **Later dates**: More documents, potentially less outstanding amounts
+- Choose based on your reporting requirements and business needs
+
+#### **Output**
+
+The script generates:
+- **Database records**: Ageing fact table populated with calculated data
+- **CSV file**: `ageing_fact_table_YYYY-MM-DD.csv` with ageing analysis results
+- **Logs**: Detailed processing information in console output
