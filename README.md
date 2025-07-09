@@ -1,4 +1,4 @@
-# Data Warehouse Ageing Fact Table
+# Data Ageing Fact Table Assignment
 
 This project implements a data pipeline to build a daily ageing snapshot fact table for outstanding invoices and credit notes. The system processes invoices, credit notes, and payments to create an ageing analysis grouped by how long each document has been unpaid.
 
@@ -42,9 +42,8 @@ CREATE TABLE credit_notes (
 ```
 
 **Sample Data**:
-- 8 credit note records with amounts ranging from $50 to $300
-- Dates from 2024-12-01 to 2025-06-01
-- Same centre/class structure as invoices
+- Sample data on path sample_data/*.csv
+- Sample output for data in sample_data/ageging_output_2025-07-07.csv
 
 ### 3. Payments Table (`03_payments.sql`)
 
@@ -86,21 +85,12 @@ CREATE TABLE ageing_fact_table (
     day_180 DECIMAL(10,2) DEFAULT 0.00,  -- Outstanding in 151-180 days
     day_180_and_above DECIMAL(10,2) DEFAULT 0.00, -- Outstanding > 180 days
     document_type VARCHAR(20) NOT NULL,   -- 'invoice' or 'credit_note'
-    as_at_date DATE NOT NULL,             -- Reference date for ageing
+    as_at_date DATE NOT NULL,             -- Snapshot date for ageing
 );
 ```
 
 
 ## Usage
 
-1. **Setup Database**: Run migration files in order (01 → 02 → 03 → 04)
-2. **Process Ageing**: Run `python ageing_processor.py`
-3. **Export Results**: CSV file is automatically generated with ageing data
-
-## Sample Output
-
-The system generates ageing fact table data showing:
-- Which documents have outstanding balances
-- How long each document has been outstanding
-- Distribution across ageing buckets
-- Total outstanding amounts by ageing period
+1. **Setup Database**: Run migration files `run_migrations.sh`
+2. **Process Ageing Pipeline**: Run `python ageing_processor.py`
