@@ -1,8 +1,10 @@
 # Data Ageing Fact Table Assignment
 
-This project implements a data pipeline to build a daily ageing snapshot fact table for outstanding invoices and credit notes. The system processes invoices, credit notes, and payments to create an ageing analysis grouped by how long each document has been unpaid.
+- This project implements a data pipeline to build a daily ageing snapshot fact table for outstanding invoices and credit notes. The system processes invoices, credit notes, and payments to create an ageing analysis grouped by how long each document has been unpaid.
 
-The database is Postgresql, Python Libs used on this project are: psycopg2 and python-dotenv
+- The database is Postgresql, Python Libs used on this project are: psycopg2 and python-dotenv
+
+- The Pipeline used on this project is Python code for simple ingestion. We can use other pipeline with DBT or PySpark for large scale data
 
 ## Table of Contents
 
@@ -367,6 +369,9 @@ The script generates:
 - **CSV file**: `ageing_fact_table_YYYY-MM-DD.csv` with ageing analysis results
 - **Logs**: Detailed processing information in console output
 
+#### **What need to improve for pipeline**
+We can use DBT to do the data modeling on this project. It quite convenient and it has some feature for dbt test purpose to ensure the data quality
+
 ## Testing
 
 ### **What to Test**
@@ -384,6 +389,8 @@ python test_ageing_processor.py
 ```
 
 ### **What Needs to be Added**
+
+Currenly these test cases above still not running well as expected and I miss some test cases so I add some cases about what I think for this project
 
 #### **1. Data Accuracy Tests**
 - Test ageing bucket calculations
