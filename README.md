@@ -2,6 +2,12 @@
 
 This project implements a data pipeline to build a daily ageing snapshot fact table for outstanding invoices and credit notes. The system processes invoices, credit notes, and payments to create an ageing analysis grouped by how long each document has been unpaid.
 
+## Table of Contents
+
+- [Database Schema](#database-schema)
+- [Ageing SQL Logic](#ageing-sql-logic)
+- [How To Run Data Pipeline](#how-to-run-data-pipeline)
+
 ## Database Schema
 
 ![table_schemas](https://github.com/user-attachments/assets/f1c38c95-d4c2-4b11-8a93-91d26f038d0e)
