@@ -60,43 +60,7 @@ class AgeingProcessor:
             self.conn.close()
             logger.info("Database connection closed")
     
-    def execute_migrations(self):
-        """Execute migration files in order"""
-        migration_files = [
-            "migrations/01_invoices.sql",
-            "migrations/02_credit_notes.sql", 
-            "migrations/03_payments.sql",
-            "migrations/04_ageing_fact_table.sql"
-        ]
-        
-        # Check if all migration files exist before executing
-        missing_files = []
-        for file_path in migration_files:
-            if not os.path.exists(file_path):
-                missing_files.append(file_path)
-        
-        if missing_files:
-            error_msg = f"Missing migration files: {', '.join(missing_files)}"
-            logger.error(error_msg)
-            raise FileNotFoundError(error_msg)
-        
-        logger.info(f"All {len(migration_files)} migration files found, proceeding with execution")
-        
-        for file_path in migration_files:
-            try:
-                logger.info(f"Executing migration: {file_path}")
-                with open(file_path, 'r') as f:
-                    sql = f.read()
-                
-                with self.conn.cursor() as cur:
-                    cur.execute(sql)
-                self.conn.commit()
-                logger.info(f"Migration {file_path} executed successfully")
-                
-            except Exception as e:
-                logger.error(f"Failed to execute migration {file_path}: {e}")
-                self.conn.rollback()
-                raise
+
      
     def clear_existing_ageing_data(self, as_at_date: date):
         """Clear existing ageing data for the specified date"""
@@ -179,9 +143,6 @@ def main():
         
         # Connect to database
         processor.connect()
-        
-        # Execute migrations
-        processor.execute_migrations()
         
 
         as_at_date = date(2025, 7, 7)
