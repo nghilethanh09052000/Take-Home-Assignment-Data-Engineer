@@ -105,7 +105,7 @@ CREATE TABLE ageing_fact_table (
 
 ## Ageing SQL Logic (`sql/generate_ageing_fact.sql`)
 
-The ageing fact table generation uses a complex SQL query with Common Table Expressions (CTEs) to calculate outstanding amounts and apply ageing bucket logic.
+The ageing fact table to calculate outstanding amounts and apply ageing bucket logic.
 
 ### **Step 1: Document Payments Calculation**
 ```sql
