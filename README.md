@@ -12,6 +12,9 @@ The database is Postgresql, libs I use in this is: psycopg2 and python-dotenv
   - [Setup Python Environment](#0-setup-python-environment)
   - [Setup Database](#1-setup-database-run_migrationssh)
   - [Process Ageing Pipeline](#2-process-ageing-pipeline-ageing_processorpy)
+- [Testing](#testing)
+  - [Current Test Coverage](#current-test-coverage)
+  - [Areas for Improvement](#areas-for-improvement)
 
 ## Database Schema
 
@@ -368,3 +371,49 @@ The script generates:
 - **Database records**: Ageing fact table populated with calculated data
 - **CSV file**: `ageing_fact_table_YYYY-MM-DD.csv` with ageing analysis results
 - **Logs**: Detailed processing information in console output
+
+## Testing
+
+### **What to Test**
+
+#### **Current Tests**
+- Database connection and configuration
+- Data clearing functionality
+- Ageing fact table generation
+- CSV export functionality
+- Date handling for multiple scenarios
+
+#### **How to Run**
+```bash
+python test_ageing_processor.py
+```
+
+### **What Needs to be Added**
+
+#### **1. Data Accuracy Tests**
+- Test ageing bucket calculations
+- Verify outstanding amounts are correct
+- Check that only one bucket gets the amount
+
+#### **2. Multi-Date Comparison**
+- Generate CSV files for different dates
+- Compare results to verify:
+  - Outstanding amounts decrease over time
+  - New documents appear in later dates
+  - Ageing buckets shift correctly
+
+#### **3. CSV Content Validation**
+- Check CSV structure and columns
+- Validate data types and formats
+- Ensure no missing or invalid data
+
+#### **4. Error Handling**
+- Database connection failures
+- Invalid SQL files
+- Missing environment variables
+- Invalid date formats
+
+#### **5. Performance Testing**
+- Measure processing time
+- Test with larger datasets
+- Ensure acceptable performance
