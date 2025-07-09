@@ -4,6 +4,10 @@ This project implements a data pipeline to build a daily ageing snapshot fact ta
 
 ## Database Schema
 
+![table_schemas](https://github.com/user-attachments/assets/f1c38c95-d4c2-4b11-8a93-91d26f038d0e)
+
+Link: (https://app.diagrams.net/#G1Mvf2_01wcRHAVNsNOkWkuzq0-hVgnWZ-#%7B%22pageId%22%3A%228-2cqByDnq3awB_osbsl%22%7D)
+
 ### 1. Invoices Table (`01_invoices.sql`)
 
 **Purpose**: Stores invoice records with their amounts and metadata.
