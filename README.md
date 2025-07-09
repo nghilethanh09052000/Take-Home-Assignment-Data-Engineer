@@ -211,5 +211,71 @@ The SQL uses 6 parameters (all the same as_at_date):
 
 ## How To Run Data Pipeline
 
-1. **Setup Database**: Run migration files `run_migrations.sh`
-2. **Process Ageing Pipeline**: Run `python ageing_processor.py`
+### 1. Setup Database (`run_migrations.sh`)
+
+The `run_migrations.sh` script sets up the database tables and sample data. It executes the migration files in the correct order to create the required schema.
+
+#### **Database Connection Setup**
+
+Before running the script, modify the database connection parameters in `run_migrations.sh`:
+
+```bash
+# Database connection parameters (modify these for your environment)
+DB_HOST=${DB_HOST:-localhost}      # Your PostgreSQL host
+DB_PORT=${DB_PORT:-5432}          # Your PostgreSQL port
+DB_NAME=${DB_NAME:-postgres}      # Your database name
+DB_USER=${DB_USER:-postgres}      # Your database username
+```
+
+#### **How to Run**
+
+**Option 1: Use default settings**
+```bash
+chmod +x run_migrations.sh
+./run_migrations.sh
+```
+
+**Option 2: Override connection parameters**
+```bash
+DB_HOST=your_host DB_PORT=5432 DB_NAME=your_db DB_USER=your_user ./run_migrations.sh
+```
+
+**Option 3: Set environment variables**
+```bash
+export DB_HOST=your_host
+export DB_PORT=5432
+export DB_NAME=your_db
+export DB_USER=your_user
+./run_migrations.sh
+```
+
+#### **What the Script Does**
+
+1. **Checks prerequisites**: Verifies `psql` is installed
+2. **Validates files**: Ensures all migration files exist
+3. **Executes migrations**: Runs SQL files in order:
+   - `01_invoices.sql` - Creates invoices table + sample data
+   - `02_credit_notes.sql` - Creates credit_notes table + sample data
+   - `03_payments.sql` - Creates payments table + sample data
+   - `04_ageing_fact_table.sql` - Creates ageing fact table
+4. **Reports progress**: Shows success/failure for each migration
+
+#### **Prerequisites**
+
+- **PostgreSQL**: Must be installed and running
+- **psql**: Command-line tool must be in PATH
+- **Database**: Target database must exist
+- **Permissions**: User must have CREATE TABLE and INSERT permissions
+
+### 2. Process Ageing Pipeline
+
+After successful database setup, run the ageing processor:
+
+```bash
+python ageing_processor.py
+```
+
+This will:
+- Connect to the database
+- Generate ageing fact table data
+- Export results to CSV file

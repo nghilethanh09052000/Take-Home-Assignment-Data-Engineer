@@ -91,8 +91,6 @@ class AgeingProcessor:
             self.conn.rollback()
             raise
     
-
-    
     def export_ageing_to_csv(self, as_at_date: date, filename: str = None):
         """Export ageing fact table data to CSV using COPY"""
         if filename is None:
