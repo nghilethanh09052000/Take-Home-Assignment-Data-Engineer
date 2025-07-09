@@ -356,14 +356,9 @@ as_at_date = date(2024, 12, 31)             # Process as of December 31, 2024
 
 **What `as_at_date` Affects**:
 - **Document Inclusion**: Only documents created on or before this date are processed
-- **Payment Cutoff**: Only payments made on or before this date are considered
 - **Ageing Calculation**: Days old is calculated as `as_at_date - document_date`
 - **Output File**: CSV filename includes this date (e.g., `ageing_fact_table_2025-07-07.csv`, `ageing_fact_table_2025-07-08.csv`)
 
-**Business Impact**:
-- **Earlier dates**: Fewer documents, potentially more outstanding amounts
-- **Later dates**: More documents, potentially less outstanding amounts
-- Choose based on your reporting requirements and business needs
 
 #### **Output**
 
