@@ -110,10 +110,8 @@ WITH document_payments AS (
     GROUP BY document_id, document_type
 )
 ```
-**Purpose**: Calculate total payments made against each document up to the as_at_date
-- **Filters**: Only payments made on or before the reference date
-- **Groups**: By document_id and document_type to handle invoices and credit notes separately
-- **Result**: Total payments per document for outstanding calculation
+**Purpose**: Calculate total payments made against each document up to the as_at_date. We filter only payments made on or before the reference date and group by document_id and document_type to handle invoices and credit notes separately
+
 
 ### **Step 2: Outstanding Invoices**
 ```sql
@@ -130,11 +128,7 @@ invoices_outstanding AS (
     WHERE i.invoice_date <= %s
 )
 ```
-**Purpose**: Calculate outstanding amounts for invoices
-- **Outstanding**: `total_amount - total_payments` (COALESCE handles NULL payments)
-- **Days Old**: Calculate days from invoice_date to as_at_date
-- **Filter**: Only invoices issued on or before as_at_date
-- **LEFT JOIN**: Ensures invoices without payments are included
+**Purpose**: Calculate outstanding amounts for invoices. With `total_amount - total_payments` (COALESCE handles NULL payments) and join with document_payments to process the invoice
 
 ### **Step 3: Outstanding Credit Notes**
 ```sql
@@ -151,10 +145,7 @@ credit_notes_outstanding AS (
     WHERE cn.credit_note_date <= %s
 )
 ```
-**Purpose**: Calculate outstanding amounts for credit notes
-- **Same logic** as invoices but for credit notes
-- **Document type**: Set to 'credit_note' for identification
-- **Date field**: Uses credit_note_date instead of invoice_date
+**Purpose**: Calculate outstanding amounts for credit notes as invoices but for credit notes. We set to 'credit_note' for identification of credit_notes table and we use the same logic just like step 2
 
 ### **Step 4: Combine Documents**
 ```sql
@@ -165,8 +156,6 @@ all_documents AS (
 )
 ```
 **Purpose**: Combine invoices and credit notes into single dataset
-- **UNION ALL**: Preserves all records from both sources
-- **Same structure**: Both CTEs return identical column structure
 
 ### **Step 5: Ageing Bucket Assignment**
 ```sql
@@ -215,9 +204,6 @@ SELECT ... FROM ageing_buckets
 ORDER BY centre_id, class_id, document_id
 ```
 **Purpose**: Insert processed data into the fact table
-- **All columns**: Populated with calculated values
-- **as_at_date**: Set to the reference date parameter
-- **Ordering**: By centre, class, document for consistent results
 
 ### **Parameter Usage**
 The SQL uses 6 parameters (all the same as_at_date):
@@ -228,7 +214,7 @@ The SQL uses 6 parameters (all the same as_at_date):
 5. **Credit note date filter**: `WHERE cn.credit_note_date <= %s`
 6. **Fact table as_at_date**: `%s as as_at_date`
 
-## Usage
+## How To Run Data Pipeline
 
 1. **Setup Database**: Run migration files `run_migrations.sh`
 2. **Process Ageing Pipeline**: Run `python ageing_processor.py`
