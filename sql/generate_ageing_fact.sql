@@ -42,7 +42,6 @@ all_documents AS (
     SELECT * FROM credit_notes_outstanding
 ),
 ageing_buckets AS (
-    -- Apply ageing bucket logic
     SELECT 
         centre_id,
         class_id,
